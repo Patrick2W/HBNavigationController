@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A52EDBBC22811478006003BC /* HBNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A52EDBBB22811478006003BC /* HBNavigationBar.m */; };
+		A52EDBBF228118C2006003BC /* UIViewController+HBNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = A52EDBBE228118C2006003BC /* UIViewController+HBNavigation.m */; };
 		A55CE12B228029AE002399D3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CE12A228029AE002399D3 /* AppDelegate.m */; };
 		A55CE12E228029AE002399D3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CE12D228029AE002399D3 /* ViewController.m */; };
 		A55CE131228029AE002399D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A55CE12F228029AE002399D3 /* Main.storyboard */; };
@@ -17,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A52EDBBA22811478006003BC /* HBNavigationBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBNavigationBar.h; sourceTree = "<group>"; };
+		A52EDBBB22811478006003BC /* HBNavigationBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBNavigationBar.m; sourceTree = "<group>"; };
+		A52EDBBD228118C2006003BC /* UIViewController+HBNavigation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+HBNavigation.h"; sourceTree = "<group>"; };
+		A52EDBBE228118C2006003BC /* UIViewController+HBNavigation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+HBNavigation.m"; sourceTree = "<group>"; };
 		A55CE126228029AE002399D3 /* HBNavigationControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBNavigationControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A55CE129228029AE002399D3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A55CE12A228029AE002399D3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,6 +86,10 @@
 			children = (
 				A55CE14022802A2C002399D3 /* HBNavigationController.h */,
 				A55CE14122802A2C002399D3 /* HBNavigationController.m */,
+				A52EDBBA22811478006003BC /* HBNavigationBar.h */,
+				A52EDBBB22811478006003BC /* HBNavigationBar.m */,
+				A52EDBBD228118C2006003BC /* UIViewController+HBNavigation.h */,
+				A52EDBBE228118C2006003BC /* UIViewController+HBNavigation.m */,
 			);
 			name = HBNavigationController;
 			path = ../HBNavigationController;
@@ -158,6 +168,8 @@
 				A55CE12E228029AE002399D3 /* ViewController.m in Sources */,
 				A55CE14222802A2C002399D3 /* HBNavigationController.m in Sources */,
 				A55CE139228029B8002399D3 /* main.m in Sources */,
+				A52EDBBC22811478006003BC /* HBNavigationBar.m in Sources */,
+				A52EDBBF228118C2006003BC /* UIViewController+HBNavigation.m in Sources */,
 				A55CE12B228029AE002399D3 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,6 +315,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U4C972C9SR;
 				INFOPLIST_FILE = HBNavigationControllerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,6 +333,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U4C972C9SR;
 				INFOPLIST_FILE = HBNavigationControllerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

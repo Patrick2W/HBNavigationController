@@ -7,55 +7,53 @@
 //
 
 #import "HBNavigationController.h"
+#import "UIViewController+HBNavigation.h"
+#import "HBNavigationBar.h"
 
-@interface HBNavigationController ()
+@interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
 @end
 
 @implementation HBNavigationController
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        NSLog(@"%@: %@",NSStringFromSelector(_cmd), [NSDate date]);
-    }
-    return self;
-}
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        NSLog(@"%@: %@",NSStringFromSelector(_cmd), [NSDate date]);
-    }
-    return self;
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        NSLog(@"%@: %@",NSStringFromSelector(_cmd), [NSDate date]);
     }
     return self;
 }
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController {
-    self = [super initWithRootViewController:rootViewController];
+    self = [self initWithNavigationBarClass:[HBNavigationBar class] toolbarClass:[UIToolbar class]];
     if (self) {
-        NSLog(@"%@: %@",NSStringFromSelector(_cmd), [NSDate date]);
-    }
-    return self;
-}
-
-- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass {
-    self = [super initWithNavigationBarClass:navigationBarClass toolbarClass:toolbarClass];
-    if (self) {
-        NSLog(@"%@: %@",NSStringFromSelector(_cmd), [NSDate date]);
+        
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.delegate = self;
+    //self.interactivePopGestureRecognizer.delegate = self;
+    
 }
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    
+}
+
+
+#pragma mark - UIGestureRecognizerDelegate
 
 @end
