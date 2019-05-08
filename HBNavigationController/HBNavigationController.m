@@ -90,7 +90,7 @@
         //UIViewController *to = [coordinator viewControllerForKey:UITransitionContextToViewControllerKey];
         UIViewController *to = viewController;
         HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-        
+        BOOL isPush = [self.viewControllers containsObject:from];
         BOOL after = NO;
         if (!HBImageIsEqual(to.navBarBgImage, from.navBarBgImage) && HBAlphaIsEqual(to.navBarBgAlpha, from.navBarBgAlpha)) {
             // 背景图片和透明度都不相同
@@ -103,7 +103,7 @@
         }
         
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            if (after) {
+            if (after && !isPush) {
                 navBar.backgroundAlpha = to.navBarBgAlpha;
             } else {
                 [self updateNavBarForToViewController:to];

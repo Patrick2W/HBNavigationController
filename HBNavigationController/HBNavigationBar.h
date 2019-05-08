@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 导航栏背景视图Alpha
  * 默认为barBackgroundView的Alpha
  */
-@property (assign, nonatomic) IBInspectable CGFloat backgroundAlpha;
+@property (assign, nonatomic) CGFloat backgroundAlpha;
 
 /**
  * 导航栏背景视图

@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "UIViewController+HBNavigation.h"
+#import "UIImage+Add.h"
 
 @interface DetailViewController ()
 
@@ -21,14 +22,10 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-//    self.navBarBgImage = [self.class imageWithColor:[UIColor blueColor]];
-    //    vc.navBarBgImage = [self.class imageWithColor:[UIColor redColor]];
-//    self.navBarBgAlpha = 0;
-    self.title = @"第二页";
-    self.navBarTitleColor = [UIColor blackColor];
+    self.title = @"春雨里洗过的太阳";
+    self.navBarTitleColor = [UIColor whiteColor];
     self.navBarTitleFont = [UIFont systemFontOfSize:18];
-    
-    
+    self.navBarBgImage = [UIImage imageWithColor:[UIColor brownColor]];
     
     _testButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _testButton.frame = CGRectMake(0, 0, 100, 40);
