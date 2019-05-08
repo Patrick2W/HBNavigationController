@@ -11,6 +11,7 @@
 @implementation HBNavigationBar {
     
     UIView *_barBackgroundView;
+    UIImageView *_barShadowImageView;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -45,6 +46,22 @@
     return _barBackgroundView;
 }
 
+- (UIImageView *)barShadowImageView {
+    if (!_barShadowImageView) {
+        NSArray *sub = self.barBackgroundView.subviews;
+        if (sub.count > 1) {
+            _barShadowImageView = sub[1];
+        }
+    }
+    return _barShadowImageView;
+}
+
+- (void)setBackgroundAlpha:(CGFloat)backgroundAlpha {
+    if (backgroundAlpha < 0) return;
+    _backgroundAlpha = backgroundAlpha;
+    [self updateBackgroundAlpha:backgroundAlpha];
+}
+
 - (void)setBackgroundImage:(UIImage *)backgroundImage forBarMetrics:(UIBarMetrics)barMetrics {
     UIImage *current = [self backgroundImageForBarMetrics:barMetrics];
     if (!HBImageIsEqual(current, backgroundImage)) {
@@ -59,8 +76,35 @@
 }
 
 - (void)setAlpha:(CGFloat)alpha {
+    if (alpha < 0) return;
     if (!HBAlphaIsEqual(self.alpha, alpha)) {
         [super setAlpha:alpha];
+    }
+}
+
+- (void)setTitlefont:(UIFont *)titlefont {
+    _titlefont = titlefont;
+    [self updateTitleTextAttributes];
+}
+
+- (void)setTitleColor:(UIColor *)titleColor {
+    _titleColor = titleColor;
+    [self updateTitleTextAttributes];
+}
+
+- (void)updateTitleTextAttributes {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    if (self.titleTextAttributes) {
+        [dic addEntriesFromDictionary:self.titleTextAttributes];
+    }
+    if (self.titlefont) {
+        [dic setObject:self.titlefont forKey:NSFontAttributeName];
+    }
+    if (self.titleColor) {
+        [dic setObject:self.titleColor forKey:NSForegroundColorAttributeName];
+    }
+    if (dic.count > 0) {
+        self.titleTextAttributes = dic;
     }
 }
 

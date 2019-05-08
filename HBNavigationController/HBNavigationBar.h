@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 NS_INLINE BOOL HBAlphaIsEqual(CGFloat alpha1, CGFloat alpha2) {
-    NSUInteger ap1 = alpha1 * 10000;
-    NSUInteger ap2 = alpha2 * 10000;
+    NSInteger ap1 = alpha1 * 10000;
+    NSInteger ap2 = alpha2 * 10000;
     return ap1 == ap2;
 }
 
@@ -38,6 +38,21 @@ NS_ASSUME_NONNULL_BEGIN
  * 导航栏背景视图
  */
 @property (readonly, nonatomic) UIView *barBackgroundView;
+
+/**
+ * 分割线视图
+ */
+@property (readonly, nonatomic) UIImageView *barShadowImageView;
+
+/**
+ *  标题字体
+ */
+@property (strong, nonatomic) UIFont *titlefont;
+
+/**
+ *  标题颜色
+ */
+@property (strong, nonatomic) UIColor *titleColor;
 
 @end
 

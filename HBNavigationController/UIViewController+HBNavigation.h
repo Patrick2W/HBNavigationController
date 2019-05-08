@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 // 导航栏背景Alpha
 @property (assign, nonatomic) CGFloat navBarBgAlpha;
 // 导航栏分割线Alpha
-@property (assign, nonatomic) CGFloat navBarShadowAlpha;
+//@property (assign, nonatomic) CGFloat navBarShadowAlpha;
 // 导航栏图片
 @property (strong, nonatomic) UIImage *navBarBgImage;
 // 导航栏分割线图片
@@ -31,6 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) BOOL popGestureDisEnabled;
 // 当Push的时候是否自动隐藏Bottom Bar, 默认 NO
 @property (assign, nonatomic) BOOL autoHideBottomBarWhenPush;
+
+// 手动更新导航栏样式
+- (void)updateNavBarStyleIfNeeded;
+// 手动更新导航栏标题样式
+- (void)updateNavBarTitleAttributesIfNeeded;
 
 @end
 

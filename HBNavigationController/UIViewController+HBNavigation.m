@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+HBNavigation.h"
+#import "HBNavigationController.h"
 #import <objc/runtime.h>
 
 @implementation UIViewController (HBNavigation)
@@ -95,6 +96,22 @@
 - (BOOL)autoHideBottomBarWhenPush {
     id obj = objc_getAssociatedObject(self, _cmd);
     return obj ? [obj boolValue] : NO;
+}
+
+#pragma mark - Public Method
+
+- (void)updateNavBarStyleIfNeeded {
+    if ([self.navigationController isKindOfClass:[HBNavigationController class]]) {
+        HBNavigationController *nav = (HBNavigationController *)self.navigationController;
+        [nav updateNavBarForToViewController:self];
+    }
+}
+
+- (void)updateNavBarTitleAttributesIfNeeded {
+    if ([self.navigationController isKindOfClass:[HBNavigationController class]]) {
+        HBNavigationController *nav = (HBNavigationController *)self.navigationController;
+        [nav updateNavBarTitleAttibutesForToViewController:self];
+    }
 }
 
 @end
