@@ -135,4 +135,12 @@
     return YES;
 }
 
+- (void)interactivePopGestureRecognizerDidTouchHandler {
+    id <UIViewControllerTransitionCoordinator> coordinator = self.transitionCoordinator;
+    if (coordinator) {
+        NSLog(@"percentComplete: %.2f", coordinator.percentComplete);
+        NSLog(@"completionVelocity: %.2f", coordinator.completionVelocity);
+    }
+}
+
 @end
