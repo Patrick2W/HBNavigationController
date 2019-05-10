@@ -24,7 +24,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"春雨里洗过的太阳";
     self.navBarTitleColor = [UIColor whiteColor];
-    self.navBarTitleFont = [UIFont systemFontOfSize:18];
+//    self.navBarBgAlpha = 0.5;
+    self.navBarTitleFont = [UIFont systemFontOfSize:12];
     self.navBarBgImage = [UIImage imageWithColor:[UIColor brownColor]];
     
     _testButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -33,6 +34,8 @@
     _testButton.backgroundColor = [UIColor redColor];
     [_testButton addTarget:self action:@selector(popBack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.testButton];
+    
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (void)popBack {

@@ -10,7 +10,9 @@
 #import "UIViewController+HBNavigation.h"
 #import "HBNavigationBar.h"
 
-@interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate>
+@interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate, UINavigationBarDelegate>
+
+@property (assign, nonatomic) BOOL tempTranslucent;
 
 @end
 
@@ -28,6 +30,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationBar.translucent = NO;
     
     self.delegate = self;
     self.interactivePopGestureRecognizer.delegate = self;
@@ -60,7 +64,6 @@
 - (void)updateNavBarForToViewController:(UIViewController *)toViewController {
     if (![self.navigationBar isKindOfClass:HBNavigationBar.class]) return;
     HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-    [navBar setBackgroundAlpha:toViewController.navBarBgAlpha];
     [navBar setAlpha:toViewController.navBarAlpha];
     if (HBAlphaIsEqual(toViewController.navBarBgAlpha, 0)) {
         [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
@@ -69,6 +72,7 @@
         [navBar setBackgroundImage:toViewController.navBarBgImage forBarMetrics:UIBarMetricsDefault];
         [navBar setShadowImage:toViewController.navBarShadowImage];
     }
+    [navBar setBackgroundAlpha:toViewController.navBarBgAlpha];
 }
 
 - (void)updateNavBarTitleAttibutesForToViewController:(UIViewController *)toViewController {
@@ -76,6 +80,30 @@
     HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
     navBar.titlefont = toViewController.navBarTitleFont;
     navBar.titleColor = toViewController.navBarTitleColor;
+}
+
+- (UIView *)AddFakeViewOnViewController:(UIViewController *)viewController {
+    HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
+    
+    CGRect rect = [self.view convertRect:navBar.frame toView:viewController.view];
+    
+    
+    HBNavigationBar *fakeBar = [[HBNavigationBar alloc] initWithFrame:rect];
+    fakeBar.barStyle = navBar.barStyle;
+    fakeBar.delegate = self;
+    fakeBar.translucent = navBar.translucent;
+    [fakeBar setBackgroundImage:viewController.navBarBgImage forBarMetrics:UIBarMetricsDefault];
+    fakeBar.backgroundAlpha = viewController.navBarBgAlpha;
+    
+    [viewController.view addSubview:fakeBar];
+    
+    
+    return fakeBar;
+}
+
+- (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar {
+    
+    return UIBarPositionTopAttached;
 }
 
 #pragma mark - UINavigationControllerDelegate
@@ -89,38 +117,54 @@
         UIViewController *from = [coordinator viewControllerForKey:UITransitionContextFromViewControllerKey];
         //UIViewController *to = [coordinator viewControllerForKey:UITransitionContextToViewControllerKey];
         UIViewController *to = viewController;
-        HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-        BOOL isPush = [self.viewControllers containsObject:from];
-        BOOL after = NO;
-        if (!HBImageIsEqual(to.navBarBgImage, from.navBarBgImage) && HBAlphaIsEqual(to.navBarBgAlpha, from.navBarBgAlpha)) {
-            // 背景图片和透明度都不相同
-            // 透明度过度
-            navBar.backgroundAlpha = from.navBarBgAlpha / 4.0;
+        
+        BOOL same = HBImageIsEqual(from.navBarBgImage, to.navBarBgImage) && HBAlphaIsEqual(from.navBarBgAlpha, to.navBarBgAlpha);
+        
+        if (!same) {
+            UIView *fromFake = [self AddFakeViewOnViewController:from];
+            UIView *toFake = [self AddFakeViewOnViewController:to];
+            HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
+            [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
             
-        } else if (HBAlphaIsEqual(to.navBarBgAlpha, 0)) {
-            // 目标透明度为0
-            after = YES;
+            [navBar.barBackgroundView.layer removeAllAnimations];
+            
+            [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                NSLog(@"%@",navBar.barBackgroundView.layer.animationKeys);
+                /*
+                [UIView performWithoutAnimation:^{
+                    navBar.backgroundAlpha = 0;
+                    [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+                }];
+                 */
+                [UIView setAnimationsEnabled:NO];
+                navBar.backgroundAlpha = 0;
+                [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+                [UIView setAnimationsEnabled:YES];
+                [self updateNavBarTitleAttibutesForToViewController:to];
+                
+            } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                
+                if (context.isCancelled) {
+                    [self updateNavBarStyleAndTitleAttributesForToViewController:from];
+                } else {
+                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
+                }
+                [fromFake removeFromSuperview];
+                [toFake removeFromSuperview];
+//                self.navigationBar.translucent = self.tempTranslucent;
+            }];
+        } else {
+            [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                [self updateNavBarTitleAttibutesForToViewController:to];
+            } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                if (context.isCancelled) {
+                    [self updateNavBarStyleAndTitleAttributesForToViewController:from];
+                } else {
+                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
+                }
+            }];
         }
         
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            if (after && !isPush) {
-                navBar.backgroundAlpha = to.navBarBgAlpha;
-            } else {
-                [self updateNavBarForToViewController:to];
-            }
-            // 更新标题样式
-            [self updateNavBarTitleAttibutesForToViewController:to];
-            
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            
-            if (context.isCancelled) {
-                [UIView animateWithDuration:context.transitionDuration animations:^{
-                    [self updateNavBarStyleAndTitleAttributesForToViewController:from];
-                }];
-            } else if (after) {
-                [self updateNavBarForToViewController:to];
-            }
-        }];
     } else {
         [self updateNavBarStyleAndTitleAttributesForToViewController:viewController];
     }
@@ -132,14 +176,19 @@
     if ( self.viewControllers.count < 2 || self.topViewController.popGestureDisEnabled) {
         return NO;
     }
+    
+//    self.tempTranslucent = self.navigationBar.translucent;
+//    self.navigationBar.translucent = YES;
+    
     return YES;
 }
 
 - (void)interactivePopGestureRecognizerDidTouchHandler {
     id <UIViewControllerTransitionCoordinator> coordinator = self.transitionCoordinator;
     if (coordinator) {
-        NSLog(@"percentComplete: %.2f", coordinator.percentComplete);
-        NSLog(@"completionVelocity: %.2f", coordinator.completionVelocity);
+        // 滑动返回比例
+        //NSLog(@"percentComplete: %.2f", coordinator.percentComplete);
+        //NSLog(@"completionVelocity: %.2f", coordinator.completionVelocity);
     }
 }
 

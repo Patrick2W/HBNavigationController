@@ -30,6 +30,7 @@
     [self.view addSubview:self.tableView];
     
     self.view.backgroundColor = [UIColor yellowColor];
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (UITableView *)tableView {

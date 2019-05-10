@@ -27,12 +27,17 @@
     [super viewDidLoad];
     
     self.title = @"导航栏样式集合";
+    
+    self.view.backgroundColor = [UIColor grayColor];
+    
     self.navBarTitleColor = [UIColor whiteColor];
     self.navBarTitleFont = [UIFont systemFontOfSize:18];
     self.navBarBgImage = [UIImage imageWithColor:[UIColor brownColor]];
 //    self.navBarShadowImage = [UIImage imageWithColor:[UIColor redColor]];
     
     [self prepareDataSource];
+    
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (void)prepareDataSource {

@@ -26,9 +26,8 @@
     
     self.title = @"畅爽开怀";
     
-    
     [self setRightBarButtonItemTitle:@"不透明导航栏" andColor:[UIColor redColor] font:[UIFont systemFontOfSize:12]];
-    
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (void)rightBarButtonItemDidClicked:(id)sender {
@@ -36,6 +35,8 @@
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view.backgroundColor = [UIColor whiteColor];
     vc.navBarBgImage = [UIImage imageWithColor:[UIColor blueColor]];
+    vc.navBarBgAlpha = 0.5;
+    vc.extendedLayoutIncludesOpaqueBars = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
