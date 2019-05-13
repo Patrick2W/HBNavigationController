@@ -31,7 +31,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationBar.translucent = NO;
+    self.navigationBar.translucent = YES;
     
     self.delegate = self;
     self.interactivePopGestureRecognizer.delegate = self;
@@ -121,25 +121,15 @@
         BOOL same = HBImageIsEqual(from.navBarBgImage, to.navBarBgImage) && HBAlphaIsEqual(from.navBarBgAlpha, to.navBarBgAlpha);
         
         if (!same) {
-            UIView *fromFake = [self AddFakeViewOnViewController:from];
-            UIView *toFake = [self AddFakeViewOnViewController:to];
+            __block UIView *fromFake, *toFake;
             HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
             [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-            
-            [navBar.barBackgroundView.layer removeAllAnimations];
+            navBar.backgroundAlpha = 0;
+            fromFake = [self AddFakeViewOnViewController:from];
+            toFake = [self AddFakeViewOnViewController:to];
             
             [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                NSLog(@"%@",navBar.barBackgroundView.layer.animationKeys);
-                /*
-                [UIView performWithoutAnimation:^{
-                    navBar.backgroundAlpha = 0;
-                    [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-                }];
-                 */
-                [UIView setAnimationsEnabled:NO];
-                navBar.backgroundAlpha = 0;
-                [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-                [UIView setAnimationsEnabled:YES];
+                
                 [self updateNavBarTitleAttibutesForToViewController:to];
                 
             } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -149,9 +139,9 @@
                 } else {
                     [self updateNavBarStyleAndTitleAttributesForToViewController:to];
                 }
+                
                 [fromFake removeFromSuperview];
                 [toFake removeFromSuperview];
-//                self.navigationBar.translucent = self.tempTranslucent;
             }];
         } else {
             [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -176,9 +166,6 @@
     if ( self.viewControllers.count < 2 || self.topViewController.popGestureDisEnabled) {
         return NO;
     }
-    
-//    self.tempTranslucent = self.navigationBar.translucent;
-//    self.navigationBar.translucent = YES;
     
     return YES;
 }
