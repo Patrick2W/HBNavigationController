@@ -35,7 +35,7 @@
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view.backgroundColor = [UIColor whiteColor];
     vc.navBarBgImage = [UIImage imageWithColor:[UIColor blueColor]];
-    vc.navBarBgAlpha = 0.5;
+    vc.navBarBgAlpha = 0.3;
     vc.extendedLayoutIncludesOpaqueBars = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }

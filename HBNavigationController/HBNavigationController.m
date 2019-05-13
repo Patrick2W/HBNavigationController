@@ -12,8 +12,6 @@
 
 @interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate, UINavigationBarDelegate>
 
-@property (assign, nonatomic) BOOL tempTranslucent;
-
 @end
 
 @implementation HBNavigationController
@@ -31,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationBar.translucent = YES;
+    self.navigationBar.translucent = NO;
     
     self.delegate = self;
     self.interactivePopGestureRecognizer.delegate = self;
@@ -123,16 +121,28 @@
         if (!same) {
             __block UIView *fromFake, *toFake;
             HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-            [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
             navBar.backgroundAlpha = 0;
-            fromFake = [self AddFakeViewOnViewController:from];
-            toFake = [self AddFakeViewOnViewController:to];
+            [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+            self.navigationBar.translucent = YES;
+//            self.navigationBar.barStyle = UIBarStyleBlack;
             
             [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                
+                [UIView setAnimationsEnabled:NO];
+                fromFake = [self AddFakeViewOnViewController:from];
+                toFake = [self AddFakeViewOnViewController:to];
+                [UIView setAnimationsEnabled:YES];
                 
                 [self updateNavBarTitleAttibutesForToViewController:to];
                 
             } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                
+                [fromFake removeFromSuperview];
+                
+                
+                [toFake removeFromSuperview];
+                
+                self.navigationBar.translucent = NO;
                 
                 if (context.isCancelled) {
                     [self updateNavBarStyleAndTitleAttributesForToViewController:from];
@@ -140,8 +150,6 @@
                     [self updateNavBarStyleAndTitleAttributesForToViewController:to];
                 }
                 
-                [fromFake removeFromSuperview];
-                [toFake removeFromSuperview];
             }];
         } else {
             [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -150,7 +158,7 @@
                 if (context.isCancelled) {
                     [self updateNavBarStyleAndTitleAttributesForToViewController:from];
                 } else {
-                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
+                    //[self updateNavBarStyleAndTitleAttributesForToViewController:to];
                 }
             }];
         }
@@ -158,6 +166,12 @@
     } else {
         [self updateNavBarStyleAndTitleAttributesForToViewController:viewController];
     }
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    [self updateNavBarStyleAndTitleAttributesForToViewController:viewController];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
