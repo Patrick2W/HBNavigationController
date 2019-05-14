@@ -29,6 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     self.navigationBar.translucent = NO;
     
     self.delegate = self;
@@ -71,6 +73,7 @@
         [navBar setShadowImage:toViewController.navBarShadowImage];
     }
     [navBar setBackgroundAlpha:toViewController.navBarBgAlpha];
+    navBar.translucent = NO;
 }
 
 - (void)updateNavBarTitleAttibutesForToViewController:(UIViewController *)toViewController {
@@ -78,6 +81,15 @@
     HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
     navBar.titlefont = toViewController.navBarTitleFont;
     navBar.titleColor = toViewController.navBarTitleColor;
+}
+
+- (void)setFadeNavigationBar {
+    if (![self.navigationBar isKindOfClass:HBNavigationBar.class]) return;
+    HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
+    navBar.translucent = YES;
+    navBar.backgroundAlpha = 0;
+    [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [navBar setShadowImage:[UIImage new]];
 }
 
 - (UIView *)AddFakeViewOnViewController:(UIViewController *)viewController {
@@ -110,7 +122,7 @@
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated {
     
-    id <UIViewControllerTransitionCoordinator> coordinator = self.transitionCoordinator;
+    id <UIViewControllerTransitionCoordinator> coordinator = navigationController.transitionCoordinator;
     if (coordinator) {
         UIViewController *from = [coordinator viewControllerForKey:UITransitionContextFromViewControllerKey];
         //UIViewController *to = [coordinator viewControllerForKey:UITransitionContextToViewControllerKey];
@@ -120,34 +132,28 @@
         
         if (!same) {
             __block UIView *fromFake, *toFake;
-            HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-            navBar.backgroundAlpha = 0;
-            [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-            self.navigationBar.translucent = YES;
+            
 //            self.navigationBar.barStyle = UIBarStyleBlack;
+            fromFake = [self AddFakeViewOnViewController:from];
+            toFake = [self AddFakeViewOnViewController:to];
+            [self setFadeNavigationBar];
             
             [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
                 
-                [UIView setAnimationsEnabled:NO];
-                fromFake = [self AddFakeViewOnViewController:from];
-                toFake = [self AddFakeViewOnViewController:to];
-                [UIView setAnimationsEnabled:YES];
+                [UIView performWithoutAnimation:^{
+                }];
                 
-                [self updateNavBarTitleAttibutesForToViewController:to];
+//                [self updateNavBarTitleAttibutesForToViewController:to];
                 
             } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
                 
                 [fromFake removeFromSuperview];
-                
-                
                 [toFake removeFromSuperview];
-                
-                self.navigationBar.translucent = NO;
                 
                 if (context.isCancelled) {
                     [self updateNavBarStyleAndTitleAttributesForToViewController:from];
                 } else {
-                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
+//                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
                 }
                 
             }];
@@ -158,7 +164,7 @@
                 if (context.isCancelled) {
                     [self updateNavBarStyleAndTitleAttributesForToViewController:from];
                 } else {
-                    //[self updateNavBarStyleAndTitleAttributesForToViewController:to];
+                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
                 }
             }];
         }
