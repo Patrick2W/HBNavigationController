@@ -27,6 +27,7 @@
 //    self.navBarBgAlpha = 0.5;
     self.navBarTitleFont = [UIFont systemFontOfSize:12];
     self.navBarBgImage = [UIImage imageWithColor:[UIColor brownColor]];
+    self.navBarTranslucent = NO;
     
     _testButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _testButton.frame = CGRectMake(0, 0, 100, 40);

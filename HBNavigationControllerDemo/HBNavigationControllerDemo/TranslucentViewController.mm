@@ -20,9 +20,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor yellowColor];
-    self.navBarBgAlpha = 0;
-    self.navBarTitleColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor redColor];
+    self.navBarBgAlpha = 0.4;
+    self.navBarBgImage = [UIImage imageWithColor:[UIColor blackColor]];
+    self.navBarTranslucent = NO;
     
     self.title = @"畅爽开怀";
     
@@ -34,7 +35,7 @@
     
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view.backgroundColor = [UIColor whiteColor];
-    vc.navBarBgImage = [UIImage imageWithColor:[UIColor blueColor]];
+    vc.navBarBgImage = [UIImage imageWithColor:[UIColor colorWithWhite:0.3 alpha:0.5]];
     vc.navBarBgAlpha = 0.3;
     vc.extendedLayoutIncludesOpaqueBars = YES;
     [self.navigationController pushViewController:vc animated:YES];

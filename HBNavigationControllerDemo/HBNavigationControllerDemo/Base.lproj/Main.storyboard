@@ -14,7 +14,7 @@
         <scene sceneID="c40-zr-Vyp">
             <objects>
                 <navigationController id="RgZ-Zv-J8u" customClass="HBNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zZZ-yG-Kze" customClass="HBNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zZZ-yG-Kze">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

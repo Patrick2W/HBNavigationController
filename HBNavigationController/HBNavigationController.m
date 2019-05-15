@@ -9,29 +9,20 @@
 #import "HBNavigationController.h"
 #import "UIViewController+HBNavigation.h"
 #import "HBNavigationBar.h"
+#import "HBNavigationBarTransition.h"
 
 @interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate, UINavigationBarDelegate>
+
+@property (strong, nonatomic) HBNavigationBarTransition *barTransition;
 
 @end
 
 @implementation HBNavigationController
 
-- (instancetype)initWithRootViewController:(UIViewController *)rootViewController {
-    self = [self initWithNavigationBarClass:[HBNavigationBar class] toolbarClass:[UIToolbar class]];
-    if (self) {
-        if (rootViewController) {
-            self.viewControllers = @[rootViewController];
-        }
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    self.navigationBar.translucent = NO;
     
     self.delegate = self;
     self.interactivePopGestureRecognizer.delegate = self;
@@ -62,53 +53,15 @@
 }
 
 - (void)updateNavBarForToViewController:(UIViewController *)toViewController {
-    if (![self.navigationBar isKindOfClass:HBNavigationBar.class]) return;
-    HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-    [navBar setAlpha:toViewController.navBarAlpha];
-    if (HBAlphaIsEqual(toViewController.navBarBgAlpha, 0)) {
-        [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-        [navBar setShadowImage:[UIImage new]];
-    } else {
-        [navBar setBackgroundImage:toViewController.navBarBgImage forBarMetrics:UIBarMetricsDefault];
-        [navBar setShadowImage:toViewController.navBarShadowImage];
-    }
-    [navBar setBackgroundAlpha:toViewController.navBarBgAlpha];
-    navBar.translucent = NO;
 }
 
 - (void)updateNavBarTitleAttibutesForToViewController:(UIViewController *)toViewController {
+    /*
     if (![self.navigationBar isKindOfClass:HBNavigationBar.class]) return;
     HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
     navBar.titlefont = toViewController.navBarTitleFont;
     navBar.titleColor = toViewController.navBarTitleColor;
-}
-
-- (void)setFadeNavigationBar {
-    if (![self.navigationBar isKindOfClass:HBNavigationBar.class]) return;
-    HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-    navBar.translucent = YES;
-    navBar.backgroundAlpha = 0;
-    [navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    [navBar setShadowImage:[UIImage new]];
-}
-
-- (UIView *)AddFakeViewOnViewController:(UIViewController *)viewController {
-    HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-    
-    CGRect rect = [self.view convertRect:navBar.frame toView:viewController.view];
-    
-    
-    HBNavigationBar *fakeBar = [[HBNavigationBar alloc] initWithFrame:rect];
-    fakeBar.barStyle = navBar.barStyle;
-    fakeBar.delegate = self;
-    fakeBar.translucent = navBar.translucent;
-    [fakeBar setBackgroundImage:viewController.navBarBgImage forBarMetrics:UIBarMetricsDefault];
-    fakeBar.backgroundAlpha = viewController.navBarBgAlpha;
-    
-    [viewController.view addSubview:fakeBar];
-    
-    
-    return fakeBar;
+     */
 }
 
 - (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar {
@@ -121,63 +74,17 @@
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated {
-    
-    id <UIViewControllerTransitionCoordinator> coordinator = navigationController.transitionCoordinator;
-    if (coordinator) {
-        UIViewController *from = [coordinator viewControllerForKey:UITransitionContextFromViewControllerKey];
-        //UIViewController *to = [coordinator viewControllerForKey:UITransitionContextToViewControllerKey];
-        UIViewController *to = viewController;
-        
-        BOOL same = HBImageIsEqual(from.navBarBgImage, to.navBarBgImage) && HBAlphaIsEqual(from.navBarBgAlpha, to.navBarBgAlpha);
-        
-        if (!same) {
-            __block UIView *fromFake, *toFake;
-            
-//            self.navigationBar.barStyle = UIBarStyleBlack;
-            fromFake = [self AddFakeViewOnViewController:from];
-            toFake = [self AddFakeViewOnViewController:to];
-            [self setFadeNavigationBar];
-            
-            [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                
-                [UIView performWithoutAnimation:^{
-                }];
-                
-//                [self updateNavBarTitleAttibutesForToViewController:to];
-                
-            } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                
-                [fromFake removeFromSuperview];
-                [toFake removeFromSuperview];
-                
-                if (context.isCancelled) {
-                    [self updateNavBarStyleAndTitleAttributesForToViewController:from];
-                } else {
-//                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
-                }
-                
-            }];
-        } else {
-            [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                [self updateNavBarTitleAttibutesForToViewController:to];
-            } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                if (context.isCancelled) {
-                    [self updateNavBarStyleAndTitleAttributesForToViewController:from];
-                } else {
-                    [self updateNavBarStyleAndTitleAttributesForToViewController:to];
-                }
-            }];
-        }
-        
-    } else {
-        [self updateNavBarStyleAndTitleAttributesForToViewController:viewController];
-    }
+    [self.barTransition navigationController:navigationController
+                      willShowViewController:viewController
+                                    animated:animated];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController
        didShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated {
-    [self updateNavBarStyleAndTitleAttributesForToViewController:viewController];
+    [self.barTransition navigationController:navigationController
+                       didShowViewController:viewController
+                                    animated:animated];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -197,6 +104,13 @@
         //NSLog(@"percentComplete: %.2f", coordinator.percentComplete);
         //NSLog(@"completionVelocity: %.2f", coordinator.completionVelocity);
     }
+}
+
+- (HBNavigationBarTransition *)barTransition {
+    if (!_barTransition) {
+        _barTransition = [[HBNavigationBarTransition alloc] init];
+    }
+    return _barTransition;
 }
 
 @end

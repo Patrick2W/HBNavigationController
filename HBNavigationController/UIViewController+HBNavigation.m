@@ -47,6 +47,10 @@
     [self objcSetAssociatedKey:@selector(navBarTitleColor) withValue:navBarTitleColor];
 }
 
+- (void)setNavBarTranslucent:(BOOL)navBarTranslucent {
+    [self objcSetAssociatedKey:@selector(navBarTranslucent) withValue:@(navBarTranslucent)];
+}
+
 - (void)setPopGestureDisEnabled:(BOOL)popGestureDisEnabled {
     [self objcSetAssociatedKey:@selector(popGestureDisEnabled) withValue:@(popGestureDisEnabled)];
 }
@@ -86,6 +90,11 @@
 
 - (UIColor *)navBarTitleColor {
     return objc_getAssociatedObject(self, _cmd);
+}
+
+- (BOOL)navBarTranslucent {
+    id obj = objc_getAssociatedObject(self, _cmd);
+    return obj ? [obj boolValue] : YES;
 }
 
 - (BOOL)popGestureDisEnabled {

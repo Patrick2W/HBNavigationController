@@ -13,7 +13,7 @@
 		A5413AC72282B50300CC6238 /* UIViewController+HBNavItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A5413AC62282B50300CC6238 /* UIViewController+HBNavItem.m */; };
 		A5413ACA2282C67100CC6238 /* MenuModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A5413AC92282C67100CC6238 /* MenuModel.m */; };
 		A5413ACD2282CACE00CC6238 /* UIImage+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = A5413ACC2282CACE00CC6238 /* UIImage+Add.m */; };
-		A5413AD02282CB3500CC6238 /* TranslucentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5413ACF2282CB3500CC6238 /* TranslucentViewController.m */; };
+		A5413AD02282CB3500CC6238 /* TranslucentViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5413ACF2282CB3500CC6238 /* TranslucentViewController.mm */; };
 		A5413AD32282CE7200CC6238 /* GradientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5413AD22282CE7200CC6238 /* GradientViewController.m */; };
 		A55CE12B228029AE002399D3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CE12A228029AE002399D3 /* AppDelegate.m */; };
 		A55CE12E228029AE002399D3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CE12D228029AE002399D3 /* ViewController.m */; };
@@ -22,6 +22,9 @@
 		A55CE136228029B8002399D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A55CE134228029B8002399D3 /* LaunchScreen.storyboard */; };
 		A55CE139228029B8002399D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CE138228029B8002399D3 /* main.m */; };
 		A55CE14222802A2C002399D3 /* HBNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CE14122802A2C002399D3 /* HBNavigationController.m */; };
+		A5B8BE57228BA1DC00044826 /* UINavigationBar+HBConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B8BE56228BA1DC00044826 /* UINavigationBar+HBConfig.m */; };
+		A5B8BE5A228BE45700044826 /* HBNavigationBarTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B8BE59228BE45700044826 /* HBNavigationBarTransition.m */; };
+		A5B8BE5D228BF06900044826 /* NSObject+YYAddForKVO.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B8BE5B228BF06900044826 /* NSObject+YYAddForKVO.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +41,7 @@
 		A5413ACB2282CACE00CC6238 /* UIImage+Add.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Add.h"; sourceTree = "<group>"; };
 		A5413ACC2282CACE00CC6238 /* UIImage+Add.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Add.m"; sourceTree = "<group>"; };
 		A5413ACE2282CB3500CC6238 /* TranslucentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TranslucentViewController.h; sourceTree = "<group>"; };
-		A5413ACF2282CB3500CC6238 /* TranslucentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TranslucentViewController.m; sourceTree = "<group>"; };
+		A5413ACF2282CB3500CC6238 /* TranslucentViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TranslucentViewController.mm; sourceTree = "<group>"; };
 		A5413AD12282CE7200CC6238 /* GradientViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientViewController.h; sourceTree = "<group>"; };
 		A5413AD22282CE7200CC6238 /* GradientViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientViewController.m; sourceTree = "<group>"; };
 		A55CE126228029AE002399D3 /* HBNavigationControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBNavigationControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +56,12 @@
 		A55CE138228029B8002399D3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A55CE14022802A2C002399D3 /* HBNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBNavigationController.h; sourceTree = "<group>"; };
 		A55CE14122802A2C002399D3 /* HBNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBNavigationController.m; sourceTree = "<group>"; };
+		A5B8BE55228BA1DC00044826 /* UINavigationBar+HBConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+HBConfig.h"; sourceTree = "<group>"; };
+		A5B8BE56228BA1DC00044826 /* UINavigationBar+HBConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+HBConfig.m"; sourceTree = "<group>"; };
+		A5B8BE58228BE45700044826 /* HBNavigationBarTransition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBNavigationBarTransition.h; sourceTree = "<group>"; };
+		A5B8BE59228BE45700044826 /* HBNavigationBarTransition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBNavigationBarTransition.m; sourceTree = "<group>"; };
+		A5B8BE5B228BF06900044826 /* NSObject+YYAddForKVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YYAddForKVO.m"; sourceTree = "<group>"; };
+		A5B8BE5C228BF06900044826 /* NSObject+YYAddForKVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+YYAddForKVO.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +104,7 @@
 				A5413AC22282AFB100CC6238 /* DetailViewController.h */,
 				A5413AC32282AFB100CC6238 /* DetailViewController.m */,
 				A5413ACE2282CB3500CC6238 /* TranslucentViewController.h */,
-				A5413ACF2282CB3500CC6238 /* TranslucentViewController.m */,
+				A5413ACF2282CB3500CC6238 /* TranslucentViewController.mm */,
 				A5413AD12282CE7200CC6238 /* GradientViewController.h */,
 				A5413AD22282CE7200CC6238 /* GradientViewController.m */,
 				A5413ACB2282CACE00CC6238 /* UIImage+Add.h */,
@@ -112,14 +121,20 @@
 		A55CE13F22802A03002399D3 /* HBNavigationController */ = {
 			isa = PBXGroup;
 			children = (
+				A5B8BE5C228BF06900044826 /* NSObject+YYAddForKVO.h */,
+				A5B8BE5B228BF06900044826 /* NSObject+YYAddForKVO.m */,
 				A55CE14022802A2C002399D3 /* HBNavigationController.h */,
 				A55CE14122802A2C002399D3 /* HBNavigationController.m */,
+				A5B8BE58228BE45700044826 /* HBNavigationBarTransition.h */,
+				A5B8BE59228BE45700044826 /* HBNavigationBarTransition.m */,
 				A52EDBBA22811478006003BC /* HBNavigationBar.h */,
 				A52EDBBB22811478006003BC /* HBNavigationBar.m */,
 				A52EDBBD228118C2006003BC /* UIViewController+HBNavigation.h */,
 				A52EDBBE228118C2006003BC /* UIViewController+HBNavigation.m */,
 				A5413AC52282B50300CC6238 /* UIViewController+HBNavItem.h */,
 				A5413AC62282B50300CC6238 /* UIViewController+HBNavItem.m */,
+				A5B8BE55228BA1DC00044826 /* UINavigationBar+HBConfig.h */,
+				A5B8BE56228BA1DC00044826 /* UINavigationBar+HBConfig.m */,
 			);
 			name = HBNavigationController;
 			path = ../HBNavigationController;
@@ -197,13 +212,16 @@
 			files = (
 				A5413AD32282CE7200CC6238 /* GradientViewController.m in Sources */,
 				A55CE12E228029AE002399D3 /* ViewController.m in Sources */,
+				A5B8BE5D228BF06900044826 /* NSObject+YYAddForKVO.m in Sources */,
 				A55CE14222802A2C002399D3 /* HBNavigationController.m in Sources */,
 				A55CE139228029B8002399D3 /* main.m in Sources */,
 				A5413ACD2282CACE00CC6238 /* UIImage+Add.m in Sources */,
 				A52EDBBC22811478006003BC /* HBNavigationBar.m in Sources */,
+				A5B8BE5A228BE45700044826 /* HBNavigationBarTransition.m in Sources */,
 				A5413ACA2282C67100CC6238 /* MenuModel.m in Sources */,
+				A5B8BE57228BA1DC00044826 /* UINavigationBar+HBConfig.m in Sources */,
 				A52EDBBF228118C2006003BC /* UIViewController+HBNavigation.m in Sources */,
-				A5413AD02282CB3500CC6238 /* TranslucentViewController.m in Sources */,
+				A5413AD02282CB3500CC6238 /* TranslucentViewController.mm in Sources */,
 				A5413AC72282B50300CC6238 /* UIViewController+HBNavItem.m in Sources */,
 				A55CE12B228029AE002399D3 /* AppDelegate.m in Sources */,
 				A5413AC42282AFB100CC6238 /* DetailViewController.m in Sources */,

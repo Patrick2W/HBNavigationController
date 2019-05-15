@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIFont *navBarTitleFont;
 // 导航栏标题颜色
 @property (strong, nonatomic) UIColor *navBarTitleColor;
+// 导航栏半透明
+@property (assign, nonatomic) BOOL navBarTranslucent;
 
 // 是否禁用滑动返回手势，默认 NO
 @property (assign, nonatomic) BOOL popGestureDisEnabled;
