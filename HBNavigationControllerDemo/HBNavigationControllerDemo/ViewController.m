@@ -32,6 +32,7 @@
     
     self.navBarTitleColor = [UIColor whiteColor];
     self.navBarTitleFont = [UIFont systemFontOfSize:18];
+    self.navBarStyle = UIBarStyleDefault;
     self.navBarBgImage = [UIImage imageWithColor:[UIColor brownColor]];
 //    self.navBarShadowImage = [UIImage imageWithColor:[UIColor redColor]];
     self.navBarTranslucent = NO;

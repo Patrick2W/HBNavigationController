@@ -8,23 +8,7 @@
 
 #import "HBNavigationBarTransition.h"
 #import "UINavigationBar+HBConfig.h"
-#import "NSObject+YYAddForKVO.h"
-
-NS_INLINE BOOL HBAlphaIsEqual(CGFloat alpha1, CGFloat alpha2) {
-    NSInteger ap1 = alpha1 * 10000;
-    NSInteger ap2 = alpha2 * 10000;
-    return ap1 == ap2;
-}
-
-NS_INLINE BOOL HBImageIsEqual(UIImage *image1, UIImage *image2) {
-    if (image1 == image2) return YES;
-    if (image1 && image2) {
-        NSData *data1 = UIImagePNGRepresentation(image1);
-        NSData *data2 = UIImagePNGRepresentation(image2);
-        return [data1 isEqual:data2];
-    }
-    return NO;
-}
+#import "NSObject+HBKVOBlock.h"
 
 
 @interface _HBFakeNavgationBar : UIToolbar<UIToolbarDelegate>
@@ -78,14 +62,12 @@ NS_INLINE BOOL HBImageIsEqual(UIImage *image1, UIImage *image2) {
 @end
 
 
-@interface HBNavigationBarTransition ()
-
-@property (strong, nonatomic) _HBFakeNavgationBar *toFadeBar, *fromFadeBar;
-
-@end
-
-
 @implementation HBNavigationBarTransition
+
+- (void)navBar:(UINavigationBar *)navBar defaultStyle:(UIViewController *)target {
+    [navBar configBarStyleWithViewController:target];
+    [navBar configTitleStyleWithViewController:target];
+}
 
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
@@ -95,53 +77,53 @@ NS_INLINE BOOL HBImageIsEqual(UIImage *image1, UIImage *image2) {
     if (coordinator) {
         UIViewController *from = [coordinator viewControllerForKey:UITransitionContextFromViewControllerKey];
         UIViewController *to = viewController;
+        BOOL needFake = NO;
+        if (!HBImageIsEqual(from.navBarBgImage, to.navBarBgImage)) needFake = YES;
+        if (!HBAlphaIsEqual(from.navBarBgAlpha, to.navBarBgAlpha)) needFake = YES;
+        if (![@(from.navBarTranslucent) isEqualToNumber:@(to.navBarTranslucent)]) needFake = YES;
         
-        BOOL same = HBImageIsEqual(from.navBarBgImage, to.navBarBgImage) && HBAlphaIsEqual(from.navBarBgAlpha, to.navBarBgAlpha);
-        
-        if (!same) {
+        _HBFakeNavgationBar *toFakeBar, *fromFakeBar;
+        if (needFake) {
             
-            self.toFadeBar = [[_HBFakeNavgationBar alloc] init];
-            [self.toFadeBar updateBarWithViewController:to];
-            [to.view addSubview:self.toFadeBar];
+            toFakeBar = [[_HBFakeNavgationBar alloc] init];
+            [toFakeBar updateBarWithViewController:to];
+            [to.view addSubview:toFakeBar];
             
-            self.fromFadeBar = [[_HBFakeNavgationBar alloc] init];
-            [self.fromFadeBar updateBarWithViewController:from];
-            [from.view addSubview:self.fromFadeBar];
+            fromFakeBar = [[_HBFakeNavgationBar alloc] init];
+            [fromFakeBar updateBarWithViewController:from];
+            [from.view addSubview:fromFakeBar];
+            [self fixFakeBarFrame:fromFakeBar view:from.view navigationBar:navBar];
             
-            [self addObserveViewController:to navgationBar:navBar];
-            [self addObserveViewController:from navgationBar:navBar];
+            [self addObserveViewController:to navgationBar:navBar withFakeBar:toFakeBar];
+            [self addObserveViewController:from navgationBar:navBar withFakeBar:fromFakeBar];
             
-            [navBar updateNavigationStyle:nil];
+            [navBar configFakeStyle];
+        }
             
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            if (!needFake) {
+                [navBar configBarStyleWithViewController:to];
+            }
+            [navBar configTitleStyleWithViewController:to];
             
-            [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                
-                
-            } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                
-                if (context.isCancelled) {
-                    [navBar updateNavigationStyle:from];
-                } else {
-                    [navBar updateNavigationStyle:to];
-                }
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            UIViewController *target = to;
+            if (context.isCancelled) {
+                target = from;
+            }
+            [navBar configBarStyleWithViewController:target];
+            [navBar configTitleStyleWithViewController:target];
+            if (needFake) {
                 [self removeObserverWithViewController:to];
                 [self removeObserverWithViewController:from];
-                [self.toFadeBar removeFromSuperview];
-                [self.fromFadeBar removeFromSuperview];
-            }];
-        } else {
-            [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                if (context.isCancelled) {
-                    [navBar updateNavigationStyle:from];
-                } else {
-                    [navBar updateNavigationStyle:to];
-                }
-            }];
-        }
+                [toFakeBar removeFromSuperview];
+                [fromFakeBar removeFromSuperview];
+            }
+        }];
         
     } else {
-        [navBar updateNavigationStyle:viewController];
+        [navBar configBarStyleWithViewController:viewController];
+        [navBar configTitleStyleWithViewController:viewController];
     }
 }
 
@@ -151,36 +133,41 @@ NS_INLINE BOOL HBImageIsEqual(UIImage *image1, UIImage *image2) {
     
 }
 
-- (void)fixFadeBarFrame:(_HBFakeNavgationBar *)fadeBar
+- (void)fixFakeBarFrame:(UIView *)fakeBar
                    view:(UIView *)targetView
           navigationBar:(UINavigationBar *)navBar {
     CGRect frame = [navBar.barBgView.superview convertRect:navBar.barBgView.frame toView:targetView];
     frame.origin.x = targetView.bounds.origin.x;
-    fadeBar.frame = frame;
+    fakeBar.frame = frame;
 }
 
-- (void)addObserveViewController:(UIViewController *)vc navgationBar:(UINavigationBar *)navBar {
-    NSKeyValueObservingOptions options = NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew;
-    [vc.view addObserver:self forKeyPath:NSStringFromSelector(@selector(bounds)) options:options context:&vc];
-    [vc.view addObserver:self forKeyPath:NSStringFromSelector(@selector(frame)) options:options context:&vc];
+- (void)addObserveViewController:(UIViewController *)vc
+                    navgationBar:(UINavigationBar *)navBar
+                     withFakeBar:(UIView *)fakeBar {
+    NSKeyValueObservingOptions options = NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew;
+    NSString *keyPath1 = NSStringFromSelector(@selector(bounds));
+    NSString *keyPath2 = NSStringFromSelector(@selector(frame));
+    __weak typeof(self) weakSelf = self;
+    HBKVOBlock block = ^(NSString *keyPath, id obj, NSDictionary *change, void *context) {
+        [weakSelf fixFakeBarFrame:fakeBar view:vc.view navigationBar:navBar];
+    };
+    
+    [vc.view hb_addObserverForKeyPath:keyPath1
+                              options:options
+                              context:NULL
+                            withBlock:block];
+    
+    [vc.view hb_addObserverForKeyPath:keyPath2
+                              options:options
+                              context:NULL
+                            withBlock:block];
 }
 
 - (void)removeObserverWithViewController:(UIViewController *)vc {
-    [vc.view removeObserver:self forKeyPath:NSStringFromSelector(@selector(bounds))];
-    [vc.view removeObserver:self forKeyPath:NSStringFromSelector(@selector(frame))];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
-                       context:(void *)context {
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(bounds))] ||
-        [keyPath isEqualToString:NSStringFromSelector(@selector(frame))]) {
-        if ([object isKindOfClass:[UIView class]]) {
-            
-            
-        }
-    }
+    NSString *keyPath1 = NSStringFromSelector(@selector(bounds));
+    NSString *keyPath2 = NSStringFromSelector(@selector(frame));
+    [vc.view hb_removeObserverBlockForKeyPath:keyPath1];
+    [vc.view hb_removeObserverBlockForKeyPath:keyPath2];
 }
 
 @end

@@ -27,7 +27,6 @@ NS_INLINE void HBExchageSelector(Class eclass, SEL orginalSelector, SEL newSelec
     }
 }
 
-
 @implementation UINavigationBar (HBConfig)
 
 + (void)load {
@@ -38,36 +37,101 @@ NS_INLINE void HBExchageSelector(Class eclass, SEL orginalSelector, SEL newSelec
     
     [self hb_layoutSubviews];
     
-    [self updateBarBgAlpha:tempAlpha];
+    [self updateBarBgAlpha:self.barBgAlpha];
+}
+
+- (void)updateBarBgAlpha:(CGFloat)alpha {
+    UIView *bgView = [self barBgView];
+    if (!HBAlphaIsEqual(bgView.alpha, alpha)) {
+        bgView.alpha = alpha;
+    }
+}
+
+- (void)updateBarBgImage:(UIImage *)image {
+    UIImage *current = [self backgroundImageForBarMetrics:UIBarMetricsDefault];
+    if (HBImageIsEqual(current, image) || !image) return;
+    [self setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+}
+
+- (void)updateBarShadowImage:(UIImage *)image {
+    if (HBImageIsEqual(image, self.shadowImage) || !image) return;
+    self.shadowImage = image;
+}
+
+- (void)updateTitleTextAttributes {
+    NSMutableDictionary *titleTextAttributes = [NSMutableDictionary dictionary];
+    if (self.titleTextAttributes) {
+        [titleTextAttributes addEntriesFromDictionary:self.titleTextAttributes];
+    }
+    if (self.titlefont) {
+        [titleTextAttributes setObject:self.titlefont forKey:NSFontAttributeName];
+    }
+    if (self.titleColor) {
+        [titleTextAttributes setObject:self.titleColor forKey:NSForegroundColorAttributeName];
+    }
+    if (titleTextAttributes.count > 0) {
+        self.titleTextAttributes = titleTextAttributes;
+    }
 }
 
 - (UIView *)barBgView {
     return [self valueForKey:@"_backgroundView"];
 }
 
-- (void)updateNavigationStyle:(nullable UIViewController *)target {
-    
-    UIImage *placeholderImage = [UIImage new];
-    if (target) {
-        tempAlpha = target.navBarBgAlpha;
-        [self updateBarBgAlpha:target.navBarBgAlpha];
-        self.translucent = target.navBarTranslucent;
-        if (target.navBarBgAlpha == 0) {
-            [self setBackgroundImage:placeholderImage forBarMetrics:UIBarMetricsDefault];
-        } else {
-            [self setBackgroundImage:target.navBarBgImage forBarMetrics:UIBarMetricsDefault];
-        }
-    } else {
-        [self updateBarBgAlpha:0];
-        self.translucent = YES;
-        [self setBackgroundImage:placeholderImage forBarMetrics:UIBarMetricsDefault];
-    }
-    [self setShadowImage:target.navBarShadowImage ?: placeholderImage];
+- (UIFont *)titlefont {
+    return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)updateBarBgAlpha:(CGFloat)alpha {
-    UIView *barBgView = [self barBgView];
-    barBgView.alpha = alpha;
+- (UIColor *)titleColor {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (CGFloat)barBgAlpha {
+    id alpha = objc_getAssociatedObject(self, _cmd);
+    return alpha ? [alpha floatValue] : 1.0;
+}
+
+- (void)setTitlefont:(UIFont *)titlefont {
+    objc_setAssociatedObject(self, @selector(titlefont), titlefont, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateTitleTextAttributes];
+}
+
+- (void)setTitleColor:(UIColor *)titleColor {
+    objc_setAssociatedObject(self, @selector(titleColor), titleColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateTitleTextAttributes];
+}
+
+- (void)setBarBgAlpha:(CGFloat)barBgAlpha {
+    objc_setAssociatedObject(self, @selector(barBgAlpha), @(barBgAlpha), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateBarBgAlpha:barBgAlpha];
+}
+
+#pragma mark - Public Method
+
+- (void)configBarStyleWithViewController:(UIViewController *)target {
+    if (!target) return;
+    
+    self.translucent = target.navBarTranslucent;
+    self.barBgAlpha = target.navBarBgAlpha;
+    if (HBAlphaIsEqual(target.navBarBgAlpha, 0)) {
+        [self updateBarBgImage:[UIImage new]];
+    } else {
+        [self updateBarBgImage:target.navBarBgImage];
+    }
+    [self updateBarShadowImage:target.navBarShadowImage];
+}
+
+- (void)configTitleStyleWithViewController:(UIViewController *)target {
+    if (!target) return;
+    
+    self.titlefont = target.navBarTitleFont;
+    self.titleColor = target.navBarTitleColor;
+    self.barStyle = target.navBarStyle;
+}
+
+- (void)configFakeStyle {
+    self.translucent = YES;
+    [self updateBarBgImage:[UIImage new]];
 }
 
 @end

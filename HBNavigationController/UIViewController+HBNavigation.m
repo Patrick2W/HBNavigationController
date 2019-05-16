@@ -7,28 +7,24 @@
 //
 
 #import "UIViewController+HBNavigation.h"
-#import "HBNavigationController.h"
+#import "UINavigationBar+HBConfig.h"
 #import <objc/runtime.h>
 
 @implementation UIViewController (HBNavigation)
 
 - (void)objcSetAssociatedKey:(const void * _Nonnull)key withValue:(id _Nonnull)value {
     
-    objc_setAssociatedObject(self, key, value, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, key, value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark - Setter Method
 
-- (void)setNavBarAlpha:(CGFloat)navBarAlpha {
-    [self objcSetAssociatedKey:@selector(navBarAlpha) withValue:@(navBarAlpha)];
+- (void)setNavBarStyle:(UIBarStyle)navBarStyle {
+    [self objcSetAssociatedKey:@selector(navBarStyle) withValue:@(navBarStyle)];
 }
 
 - (void)setNavBarBgAlpha:(CGFloat)navBarBgAlpha {
     [self objcSetAssociatedKey:@selector(navBarBgAlpha) withValue:@(navBarBgAlpha)];
-}
-
-- (void)setNavBarShadowAlpha:(CGFloat)navBarShadowAlpha {
-    [self objcSetAssociatedKey:@selector(navBarShadowAlpha) withValue:@(navBarShadowAlpha)];
 }
 
 - (void)setNavBarBgImage:(UIImage *)navBarBgImage {
@@ -61,17 +57,12 @@
 
 #pragma mark - Getter Method
 
-- (CGFloat)navBarAlpha {
-    id alpha = objc_getAssociatedObject(self, _cmd);
-    return alpha ? [alpha floatValue] : 1.0;
+- (UIBarStyle)navBarStyle {
+    id style = objc_getAssociatedObject(self, _cmd);
+    return style ? [style integerValue] : UIBarStyleDefault;
 }
 
 - (CGFloat)navBarBgAlpha {
-    id alpha = objc_getAssociatedObject(self, _cmd);
-    return alpha ? [alpha floatValue] : 1.0;
-}
-
-- (CGFloat)navBarShadowAlpha {
     id alpha = objc_getAssociatedObject(self, _cmd);
     return alpha ? [alpha floatValue] : 1.0;
 }
@@ -110,17 +101,11 @@
 #pragma mark - Public Method
 
 - (void)updateNavBarStyleIfNeeded {
-    if ([self.navigationController isKindOfClass:[HBNavigationController class]]) {
-        HBNavigationController *nav = (HBNavigationController *)self.navigationController;
-        [nav updateNavBarForToViewController:self];
-    }
+    [self.navigationController.navigationBar configBarStyleWithViewController:self];
 }
 
 - (void)updateNavBarTitleAttributesIfNeeded {
-    if ([self.navigationController isKindOfClass:[HBNavigationController class]]) {
-        HBNavigationController *nav = (HBNavigationController *)self.navigationController;
-        [nav updateNavBarTitleAttibutesForToViewController:self];
-    }
+    [self.navigationController.navigationBar configTitleStyleWithViewController:self];
 }
 
 @end

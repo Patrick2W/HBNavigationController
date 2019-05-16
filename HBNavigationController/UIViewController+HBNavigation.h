@@ -12,12 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIViewController (HBNavigation)
 
-// 导航栏Alpha
-@property (assign, nonatomic) CGFloat navBarAlpha;
+@property (assign, nonatomic) UIBarStyle navBarStyle;
 // 导航栏背景Alpha
 @property (assign, nonatomic) CGFloat navBarBgAlpha;
-// 导航栏分割线Alpha
-//@property (assign, nonatomic) CGFloat navBarShadowAlpha;
 // 导航栏图片
 @property (strong, nonatomic) UIImage *navBarBgImage;
 // 导航栏分割线图片

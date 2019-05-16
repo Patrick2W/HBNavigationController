@@ -25,6 +25,8 @@
     self.navBarBgImage = [UIImage imageWithColor:[UIColor blackColor]];
     self.navBarTranslucent = NO;
     
+    self.navBarStyle = UIBarStyleBlack;
+    
     self.title = @"畅爽开怀";
     
     [self setRightBarButtonItemTitle:@"不透明导航栏" andColor:[UIColor redColor] font:[UIFont systemFontOfSize:12]];

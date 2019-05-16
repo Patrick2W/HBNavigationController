@@ -26,6 +26,7 @@
     
     self.navBarBgImage = [UIImage imageWithColor:[UIColor purpleColor]];
     self.navBarBgAlpha = 0;
+    self.navBarStyle = UIBarStyleBlack;
     
     [self.view addSubview:self.tableView];
     

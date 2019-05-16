@@ -12,16 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBNavigationController : UINavigationController
 
-/**
- *  更新导航栏样式
- */
-- (void)updateNavBarForToViewController:(UIViewController *)toViewController;
-
-/**
- *  更新导航栏标题样式
- */
-- (void)updateNavBarTitleAttibutesForToViewController:(UIViewController *)toViewController;
-
 @end
 
 NS_ASSUME_NONNULL_END

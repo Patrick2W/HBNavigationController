@@ -8,10 +8,9 @@
 
 #import "HBNavigationController.h"
 #import "UIViewController+HBNavigation.h"
-#import "HBNavigationBar.h"
 #import "HBNavigationBarTransition.h"
 
-@interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate, UINavigationBarDelegate>
+@interface HBNavigationController ()<UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) HBNavigationBarTransition *barTransition;
 
@@ -39,34 +38,6 @@
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
     return [super popViewControllerAnimated:animated];
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return [self.topViewController preferredStatusBarStyle];
-}
-
-#pragma mark - Update Method
-
-- (void)updateNavBarStyleAndTitleAttributesForToViewController:(UIViewController *)toViewController {
-    [self updateNavBarForToViewController:toViewController];
-    [self updateNavBarTitleAttibutesForToViewController:toViewController];
-}
-
-- (void)updateNavBarForToViewController:(UIViewController *)toViewController {
-}
-
-- (void)updateNavBarTitleAttibutesForToViewController:(UIViewController *)toViewController {
-    /*
-    if (![self.navigationBar isKindOfClass:HBNavigationBar.class]) return;
-    HBNavigationBar *navBar = (HBNavigationBar *)self.navigationBar;
-    navBar.titlefont = toViewController.navBarTitleFont;
-    navBar.titleColor = toViewController.navBarTitleColor;
-     */
-}
-
-- (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar {
-    
-    return UIBarPositionTopAttached;
 }
 
 #pragma mark - UINavigationControllerDelegate
