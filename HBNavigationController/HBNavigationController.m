@@ -20,9 +20,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-    
     self.delegate = self;
     self.interactivePopGestureRecognizer.delegate = self;
 }
