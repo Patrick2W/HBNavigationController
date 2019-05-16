@@ -102,9 +102,6 @@
 
 - (void)updateNavBarStyleIfNeeded {
     [self.navigationController.navigationBar configBarStyleWithViewController:self];
-}
-
-- (void)updateNavBarTitleAttributesIfNeeded {
     [self.navigationController.navigationBar configTitleStyleWithViewController:self];
 }
 

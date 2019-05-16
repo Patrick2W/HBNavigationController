@@ -33,8 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 手动更新导航栏样式
 - (void)updateNavBarStyleIfNeeded;
-// 手动更新导航栏标题样式
-- (void)updateNavBarTitleAttributesIfNeeded;
 
 @end
 
