@@ -33,10 +33,6 @@
     [super pushViewController:viewController animated:animated];
 }
 
-- (UIViewController *)popViewControllerAnimated:(BOOL)animated {
-    return [super popViewControllerAnimated:animated];
-}
-
 #pragma mark - UINavigationControllerDelegate
 
 - (void)navigationController:(UINavigationController *)navigationController
@@ -65,14 +61,7 @@
     return YES;
 }
 
-- (void)interactivePopGestureRecognizerDidTouchHandler {
-    id <UIViewControllerTransitionCoordinator> coordinator = self.transitionCoordinator;
-    if (coordinator) {
-        // 滑动返回比例
-        //NSLog(@"percentComplete: %.2f", coordinator.percentComplete);
-        //NSLog(@"completionVelocity: %.2f", coordinator.completionVelocity);
-    }
-}
+#pragma mark - Lazy Load
 
 - (HBNavigationBarTransition *)barTransition {
     if (!_barTransition) {
